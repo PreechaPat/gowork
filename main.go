@@ -17,6 +17,12 @@ func addRoutes(mux *http.ServeMux) {
 		w.Write([]byte("Hello world"))
 	})
 
+	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"up"}`))
+	})
+
 	mux.HandleFunc("GET /echo", handler.EchoHandler)
 }
 
