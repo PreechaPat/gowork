@@ -23,7 +23,9 @@ func addRoutes(mux *http.ServeMux) {
 		w.Write([]byte(`{"status":"up"}`))
 	})
 
-	mux.HandleFunc("GET /echo", handler.EchoHandler)
+	mux.HandleFunc("GET /api/echo", handler.EchoHandler)
+	mux.HandleFunc("GET /api/users", handler.ListUsersHandler)
+	mux.HandleFunc("GET /api/user/{name}", handler.GetUserHandler)
 }
 
 func main() {
