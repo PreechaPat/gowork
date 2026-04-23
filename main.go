@@ -26,6 +26,9 @@ func addRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /api/echo", handler.EchoHandler)
 	mux.HandleFunc("GET /api/users", handler.ListUsersHandler)
 	mux.HandleFunc("GET /api/user/{name}", handler.GetUserHandler)
+
+	fileServer := http.FileServer(http.Dir("./dist"))
+	mux.Handle("/", fileServer)
 }
 
 func main() {
