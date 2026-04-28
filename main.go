@@ -28,6 +28,7 @@ func NewProdServer(logger *log.Logger) *http.ServeMux {
 func addRoutes(mux *http.ServeMux) {
 
 	mux.HandleFunc("GET /api/hello", func(w http.ResponseWriter, r *http.Request) {
+		log.Print("Hello is called")
 		w.Write([]byte("Hello world"))
 	})
 
