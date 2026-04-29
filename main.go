@@ -1,23 +1,24 @@
 package main
 
 import (
+	"gowork/handler"
+	mw "gowork/middleware"
 	"log"
 	"net/http"
 	"os"
-	"worker/handler"
 )
 
 // Just without file server
 func NewDevServer(logger *log.Logger) *http.ServeMux {
 
 	mux := http.NewServeMux()
-	addRoutes(mux)
+	addRoutes(logger, mux)
 	return mux
 }
 
 func NewProdServer(logger *log.Logger) *http.ServeMux {
 	mux := http.NewServeMux()
-	addRoutes(mux)
+	addRoutes(logger, mux)
 
 	fileServer := http.FileServer(http.Dir("./dist"))
 	mux.Handle("/", fileServer)
@@ -25,18 +26,20 @@ func NewProdServer(logger *log.Logger) *http.ServeMux {
 	return mux
 }
 
-func addRoutes(mux *http.ServeMux) {
+func HealthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status":"up"}`))
+}
+
+func addRoutes(logger *log.Logger, mux *http.ServeMux) {
 
 	mux.HandleFunc("GET /api/hello", func(w http.ResponseWriter, r *http.Request) {
 		log.Print("Hello is called")
 		w.Write([]byte("Hello world"))
 	})
 
-	mux.HandleFunc("GET /api/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status":"up"}`))
-	})
+	mux.Handle("GET /api/health", mw.NewChain(mw.Logger(logger)).Then(http.HandlerFunc(HealthHandler)))
 
 	mux.HandleFunc("GET /api/auth", handler.AuthHandler)
 	mux.HandleFunc("GET /api/echo", handler.EchoHandler)

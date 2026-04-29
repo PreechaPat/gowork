@@ -1,4 +1,4 @@
-module worker
+module gowork
 
 go 1.25.0
 
