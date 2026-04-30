@@ -42,3 +42,12 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ steps.lower.outputs.image_name }}:sha-${{ steps.slug.outputs.sha10 }}
             ${{ env.REGISTRY }}/${{ steps.lower.outputs.image_name }}:latest
+
+      - name: Build and push Slim Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          build-args: SLIM=true
+          tags: |
+            ${{ env.REGISTRY }}/${{ steps.lower.outputs.image_name }}:sha-${{ steps.slug.outputs.sha10 }}-slim

@@ -1,3 +1,3 @@
 # Gowork
 
-A minimal app for testing.
+A minimal app for testing deployment in various website.
