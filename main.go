@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"gowork/handler"
 	mw "gowork/middleware"
 	"log"
@@ -49,12 +51,14 @@ func addRoutes(logger *log.Logger, mux *http.ServeMux) {
 }
 
 func main() {
+	port := flag.String("port", "8080", "port to listen on")
+	flag.Parse()
 
 	logger := log.New(os.Stdout, "", log.LstdFlags)
 
 	mux := NewProdServer(logger)
 
-	logger.Print("start server at 8080")
+	logger.Printf("start server at %s", *port)
 
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(fmt.Sprintf(":%s", *port), mux)
 }
