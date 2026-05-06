@@ -45,6 +45,10 @@ func addRoutes(logger *log.Logger, mux *http.ServeMux) {
 
 	mux.HandleFunc("GET /api/auth", handler.AuthHandler)
 	mux.HandleFunc("GET /api/echo", handler.EchoHandler)
+	// For testing cookie and things
+	mux.HandleFunc("POST /api/login", handler.LoginHandler)
+	mux.HandleFunc("POST /api/logout", handler.LogoutHandler)
+	mux.HandleFunc("POST /api/me", handler.MeHandler)
 	mux.HandleFunc("GET /api/users", handler.ListUsersHandler)
 	mux.HandleFunc("GET /api/user/{name}", handler.GetUserHandler)
 
